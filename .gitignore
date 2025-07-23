@@ -1,0 +1,19 @@
+# Ignore dotenv files (secrets)
+.env
+
+# Ignore Ruby artifacts
+*.gem
+*.rbc
+
+# Ignore bundler config and installed gems
+.bundle/
+vendor/bundle
+
+# Ignore log files and temp files
+log/
+tmp/
+*.log
+
+# Ignore OS files
+.DS_Store
+

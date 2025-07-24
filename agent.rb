@@ -1,8 +1,9 @@
-## Agent class description
-## This class is responsible for managing the conversation with the Anthropic API.
+# Agent class description
+# This class is responsible for managing the conversation with the Anthropic API.
 
 require 'dotenv/load'
 require 'anthropic'
+require_relative 'tooling'
 
 MODEL = 'claude-sonnet-4-20250514'.freeze
 MAX_TOKENS = 100
@@ -10,6 +11,7 @@ MAX_TOKENS = 100
 class Agent
   def initialize
     @conversation = []
+    @tooling = Tooling.new
     @anthropic_client = Anthropic::Client.new(
       api_key: ENV['ANTHROPIC_API_KEY']
     )
@@ -20,12 +22,13 @@ class Agent
   end
 
   def run_infrence(user_input = nil)
-    add_to_conversation('user', user_input) if user_input.present?
-  
+    add_to_conversation('user', user_input) if user_input
+
     message = @anthropic_client.messages.create(
       max_tokens: MAX_TOKENS,
       messages: @conversation,
-      model: MODEL
+      model: MODEL,
+      tools: JSON.pretty_generate(@tooling.tools)
     )
 
     @conversation << { role: message.role, content: message.content }

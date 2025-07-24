@@ -5,6 +5,7 @@ require_relative 'agent'
 Bundler.require
 
 agent = Agent.new
+tooling = Tooling.new
 
 puts "Chat with Claude Sonnet 4 (type '/q' to quit):"
 
@@ -28,8 +29,8 @@ loop do
     elsif part[:type] == :tool_use
       puts colored_label_string('Tool request from claud', part[:tool_use][:name], :magenta)
       tool_use_count += 1
-      # run tool
-      # add tool result to conversation
+      tooling.run_tool(part[:tool_use][:name], part[:tool_use][:params])
+      agent.add_to_conversation('tool_results', nil)  # Placeholder for tool results
     else
       puts colored_label_string('Error', "Unknown message part type: #{part.inspect}", :red)
     end

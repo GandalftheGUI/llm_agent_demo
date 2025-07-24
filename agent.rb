@@ -24,6 +24,8 @@ class Agent
   def run_infrence(user_input = nil)
     add_to_conversation('user', user_input) if user_input
 
+    debugger
+
     message = @anthropic_client.messages.create(
       max_tokens: MAX_TOKENS,
       messages: @conversation,

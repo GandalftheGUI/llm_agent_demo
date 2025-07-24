@@ -21,16 +21,24 @@ class Agent
     @conversation << { role: role, content: content }
   end
 
-  def run_infrence(user_input = nil)
-    add_to_conversation('user', user_input) if user_input
+  def add_tool_result(tool_use_id, content)
+    tool_result = {
+      role: 'user',
+      content: [{
+        content: content,
+        type: :tool_result,
+        tool_use_id: tool_use_id
+      }]
+    }
+    @conversation << tool_result
+  end
 
-    debugger
-
+  def run_infrence
     message = @anthropic_client.messages.create(
       max_tokens: MAX_TOKENS,
       messages: @conversation,
       model: MODEL,
-      tools: JSON.pretty_generate(@tooling.tools)
+      tools: @tooling.tools
     )
 
     @conversation << { role: message.role, content: message.content }

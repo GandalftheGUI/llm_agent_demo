@@ -6,31 +6,33 @@ Bundler.require
 
 agent = Agent.new
 tooling = Tooling.new
+take_user_input = true
 
 puts "Chat with Claude Sonnet 4 (type '/q' to quit):"
 
-take_user_input = true
 loop do
-  message = if take_user_input
-              print colored_label_string('You', '', :blue)
-              user_input = gets
-              user_input = user_input.strip
-              exit if user_input == '/q'
+  if take_user_input
+    print colored_label_string('You', '', :blue)
+    user_input = gets
+    user_input = user_input.strip
+    exit if user_input == '/q'
 
-              agent.run_infrence(user_input)
-            else
-              agent.run_infrence
-            end
+    agent.add_to_conversation('user', user_input)
+  end
+
+  message = agent.run_infrence
 
   tool_use_count = 0
   message.content.each do |part|
     if part[:type] == :text
       puts colored_label_string('Claude', part[:text], :yellow) if part[:text]
     elsif part[:type] == :tool_use
-      puts colored_label_string('Tool request from claud', part[:tool_use][:name], :magenta)
+      puts colored_label_string('Tool request from claud', "#{part[:name]}(#{part[:input]})", :green)
+
       tool_use_count += 1
-      tooling.run_tool(part[:tool_use][:name], part[:tool_use][:params])
-      agent.add_to_conversation('tool_results', nil)  # Placeholder for tool results
+      results = tooling.run_tool(part[:name], part[:input])
+
+      agent.add_tool_result(part[:id], results)
     else
       puts colored_label_string('Error', "Unknown message part type: #{part.inspect}", :red)
     end

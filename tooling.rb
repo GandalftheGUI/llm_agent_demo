@@ -1,9 +1,9 @@
 class Tooling
-  @tools = [
+  TOOLS = [
     {
       name: "read_file",
-      description: "Reads the contents of a file from disk",
-      parameters: {
+      description: "Read the contents of a given relative file path. Use this when you want to see what's inside a file. Do not use this with directory names.",
+      input_schema: {
         type: "object",
         properties: {
           path: {
@@ -16,7 +16,9 @@ class Tooling
     }
   ]
 
-  attr_reader :tools
+  def tools
+    TOOLS
+  end
 
   def run_tool(tool_name, params)
     case tool_name
@@ -28,13 +30,12 @@ class Tooling
   end
 
   def read_file(params)
-    path = params["path"]
+    path = params[:path]
     raise "File path is required" unless path
 
     begin
       # ensure file path is relative
-      content = File.read(File.expand_path(path))
-      { success: true, content: content }
+      File.read(File.expand_path(path))
     rescue Errno::ENOENT
       { success: false, error: "File not found: #{path}" }
     rescue => e

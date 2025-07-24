@@ -5,25 +5,26 @@ This project demonstrates how to build a simple agent that utilizes Anthropic's 
 Here is an example:
 
 ```
-You: where is 'run_inference' method defined and what does its code look like?
-Claude: I'll help you find the 'run_inference' method. Let me start by exploring the current directory structure to understand the codebase and locate where this method might be defined.
-Tool request from claud: list_files({:directory=>"."})
-Claude: Let me check each Ruby file to find the 'run_inference' method:
-Tool request from claud: read_file({:path=>"main.rb"})
-Claude: I can see that `run_inference` is called on the `agent` object. Let me check the `agent.rb` file:
-Tool request from claud: read_file({:path=>"agent.rb"})
-Claude: Perfect! I found the `run_inference` method. It's defined in the `Agent` class in the `agent.rb` file.
+🙋‍♂️ You: where is 'run_inference' method defined and what does its code look like?
+🤖 Claude: I'll help you find the `run_inference` method. Let me start by exploring the current directory structure to understand the codebase layout.
+🛠️ Tool request from claud: list_files({:directory=>"."})
+🤖 Claude: Let me search through the Ruby files to find the `run_inference` method:
+🛠️ Tool request from claud: read_file({:path=>"main.rb"})
+🤖 Claude: I can see that `run_inference` is called on the `agent` object. Let me check the `agent.rb` file:
+🛠️ Tool request from claud: read_file({:path=>"agent.rb"})
+🤖 Claude: Perfect! I found the `run_inference` method. Here's the information you requested:
 
-## Location and Code
+## Location
+The `run_inference` method is defined in the `Agent` class in the file `agent.rb`.
 
-The `run_inference` method is defined in the **`Agent` class** in the **`agent.rb` file**.
-
-Here's the complete method code:
-
+## Code
 ```ruby
 def run_inference
   message = @anthropic_client.messages.create(
-    max_tokens: MAX
+    max_tokens: MAX_TOKENS,
+    messages: @conversation,
+    model: MODEL,
+    tools: @
 ```
 
 ## Features

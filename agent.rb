@@ -19,9 +19,9 @@ class Agent
     @conversation << { role: role, content: content }
   end
 
-  def run_infrence(user_input)
-    add_to_conversation('user', user_input)
-
+  def run_infrence(user_input = nil)
+    add_to_conversation('user', user_input) if user_input.present?
+  
     message = @anthropic_client.messages.create(
       max_tokens: MAX_TOKENS,
       messages: @conversation,

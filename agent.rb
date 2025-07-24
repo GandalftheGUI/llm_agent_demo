@@ -33,7 +33,7 @@ class Agent
     @conversation << tool_result
   end
 
-  def run_infrence
+  def run_inference
     message = @anthropic_client.messages.create(
       max_tokens: MAX_TOKENS,
       messages: @conversation,

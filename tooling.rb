@@ -13,6 +13,20 @@ class Tooling
         },
         required: ["path"]
       }
+    },
+    {
+      name: "list_files",
+      description: "List the files in a given directory. Use this when you want to see what files or folders exist in a location.",
+      input_schema: {
+        type: "object",
+        properties: {
+          directory: {
+            type: "string",
+            description: "The relative path to the directory to list"
+          }
+        },
+        required: ["directory"]
+      }
     }
   ]
 
@@ -24,22 +38,56 @@ class Tooling
     case tool_name
     when "read_file"
       read_file(params)
+    when "list_files"
+      list_files(params)
     else
       raise "Unknown tool: #{tool_name}"
     end
   end
 
   def read_file(params)
-    path = params[:path]
-    raise "File path is required" unless path
+    relative_path = params[:path] || params["path"]
+    return error("File path is required") unless relative_path
+    return error("Absolute paths are not allowed") if absolute_path?(relative_path)
+    return error("Parent directory traversal is not allowed") if upward_path?(relative_path)
+
+    full_path = File.expand_path(relative_path)
 
     begin
-      # ensure file path is relative
-      File.read(File.expand_path(path))
+      File.read(full_path)
     rescue Errno::ENOENT
-      { success: false, error: "File not found: #{path}" }
+      error("File not found: #{relative_path}")
     rescue => e
-      { success: false, error: "Error reading file: #{e.message}" }
+      error("Error reading file: #{e.message}")
     end
+  end
+
+  def list_files(params)
+    relative_path = params[:directory] || params["directory"]
+    return error("Directory path is required") unless relative_path
+    return error("Absolute paths are not allowed") if absolute_path?(relative_path)
+    return error("Parent directory traversal is not allowed") if upward_path?(relative_path)
+
+    full_path = File.expand_path(relative_path)
+
+    begin
+      Dir.entries(full_path).reject { |f| f.start_with?('.') }.to_s
+    rescue Errno::ENOENT
+      error("Directory not found: #{relative_path}")
+    rescue => e
+      error("Error listing files: #{e.message}")
+    end
+  end
+
+  def absolute_path?(path)
+    Pathname.new(path).absolute?
+  end
+
+  def upward_path?(path)
+    path.include?("..")
+  end
+
+  def error(msg)
+    { success: false, error: msg }
   end
 end

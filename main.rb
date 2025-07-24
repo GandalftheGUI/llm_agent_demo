@@ -20,7 +20,7 @@ loop do
     agent.add_to_conversation('user', user_input)
   end
 
-  message = agent.run_infrence
+  message = agent.run_inference
 
   tool_use_count = 0
   message.content.each do |part|
@@ -31,7 +31,6 @@ loop do
 
       tool_use_count += 1
       results = tooling.run_tool(part[:name], part[:input])
-
       agent.add_tool_result(part[:id], results)
     else
       puts colored_label_string('Error', "Unknown message part type: #{part.inspect}", :red)

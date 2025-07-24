@@ -1,36 +1,29 @@
-require "bundler/setup"
+require 'bundler/setup'
+require_relative 'console_styling'
+require_relative 'agent'
 
 Bundler.require
 
-require 'dotenv/load'
-require "anthropic"
+agent = Agent.new
 
-anthropic = Anthropic::Client.new(
-  api_key: ENV['ANTHROPIC_API_KEY']
-)
+puts "Chat with Claude Sonnet 4 (type '/q' to quit):"
 
-# The API is stateless so we need to keep track of the conversation history ourselves.
-conversation = []
-
-ARGF.each do |user_input|
+loop do
+  print colored_label_string('You', '', :blue)
+  user_input = gets
   user_input = user_input.strip
 
   break if user_input == '/q'
 
-  conversation << {
-    role: :user,
-    content: user_input
-  }
-
-  message = anthropic.messages.create(
-    max_tokens: 100,
-    messages: conversation,
-    model: :"claude-sonnet-4-20250514"
-  )
-
-  conversation << { role: message.role, content: message.content }
+  message = agent.run_infrence(user_input)
 
   message.content.each do |part|
-    puts "\u001b[93mClaude\u001b[0m: #{part[:text]}" if part[:text]
+    if part[:type] == :text
+      puts colored_label_string('Claude', part[:text], :yellow) if part[:text]
+    elsif part[:type] == :tool_use
+      puts colored_label_string('Tool request from claud', part[:tool_use][:name], :magenta)
+    else
+      puts colored_label_string('Error', part.inspect, :red)
+    end
   end
 end

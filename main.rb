@@ -12,7 +12,7 @@ puts "Chat with Claude Sonnet 4 (type '/q' to quit):"
 
 loop do
   if take_user_input
-    print colored_label_string('You', '', :blue)
+    print colored_label_string('🙋‍♂️ You', '', :blue)
     user_input = gets
     user_input = user_input.strip
     exit if user_input == '/q'
@@ -25,9 +25,9 @@ loop do
   tool_use_count = 0
   message.content.each do |part|
     if part[:type] == :text
-      puts colored_label_string('Claude', part[:text], :yellow) if part[:text]
+      puts colored_label_string('🤖 Claude', part[:text], :yellow) if part[:text]
     elsif part[:type] == :tool_use
-      puts colored_label_string('Tool request from claud', "#{part[:name]}(#{part[:input]})", :green)
+      puts colored_label_string('🛠️ Tool request from claud', "#{part[:name]}(#{part[:input]})", :green)
 
       tool_use_count += 1
       results = tooling.run_tool(part[:name], part[:input])

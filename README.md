@@ -4,7 +4,7 @@ This project demonstrates how to build a simple agent that utilizes Anthropic's 
 
 This was very much inspired by https://ampcode.com/how-to-build-an-agent
 
-Here is an example:
+Here are a couple examples:
 
 ```
 🙋‍♂️ You: where is 'run_inference' method defined and what does its code look like?
@@ -28,6 +28,31 @@ def run_inference
     model: MODEL,
     tools: @
 ```
+
+```
+🙋‍♂️ You: what are some ways i can improve the codebase?
+🤖 Claude: I'd be happy to help you identify ways to improve the codebase! First, let me explore the current structure to understand what we're working with.
+🛠️ Tool request from claud: list_files({:directory=>"."})
+🤖 Claude: Let me examine the main files to understand the codebase structure and functionality:
+🛠️ Tool request from claud: read_file({:path=>"README.md"})
+🛠️ Tool request from claud: read_file({})
+🛠️ Tool request from claud: read_file({:path=>"main.rb"})
+🛠️ Tool request from claud: read_file({:path=>"agent.rb"})
+🛠️ Tool request from claud: read_file({:path=>"tooling.rb"})
+🛠️ Tool request from claud: read_file({:path=>"console_styling.rb"})
+🛠️ Tool request from claud: read_file({:path=>"Gemfile"})
+🤖 Claude: Based on my analysis of the codebase, here are several ways you can improve this LLM agent demo:
+
+## 🏗️ **Architecture & Structure**
+
+1. **Extract Configuration**
+   - Move constants like `MODEL`, `MAX_TOKENS` to a dedicated config file
+   - Add configuration validation and environment-specific settings
+
+2. **Improve Error Handling**
+   - Add proper exception classes instead of generic error strings
+```
+
 
 ## Features
 - Chat with Claude Sonnet 4 via the Anthropic API

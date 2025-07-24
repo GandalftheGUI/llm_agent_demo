@@ -31,6 +31,7 @@ loop do
 
       tool_use_count += 1
       results = tooling.run_tool(part[:name], part[:input])
+      #puts colored_label_string('Tool result', results, :magenta).truncate(100)
       agent.add_tool_result(part[:id], results)
     else
       puts colored_label_string('Error', "Unknown message part type: #{part.inspect}", :red)

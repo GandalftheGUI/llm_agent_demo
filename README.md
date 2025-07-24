@@ -2,6 +2,8 @@
 
 This project demonstrates how to build a simple agent that utilizes Anthropic's Claude LLM to combine multiple tools in order to achieve complex results. For example, you can ask the agent to "find the definition of some_method_name and tell me about it"—the LLM will use its toolset (such as file reading and directory listing) to locate the method and provide an explanation.
 
+This blew my mind a little, its one thing to have an llm reason about the data it has gathered its another to insert it into a novel environment and watch it problem-solve.
+
 ## Features
 - Chat with Claude Sonnet 4 via the Anthropic API
 - Tool use: read files, list directories, and more

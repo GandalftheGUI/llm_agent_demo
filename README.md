@@ -2,6 +2,8 @@
 
 This project demonstrates how to build a simple agent that utilizes Anthropic's Claude LLM to combine multiple tools in order to achieve complex results. This agent can inspect its own codebase with two commands "list_files" and "read_file". For example, you can ask the agent to "find the definition of some_method_name and tell me about it", the LLM will use its toolset to locate the method and provide an explanation.
 
+This was very much inspired by https://ampcode.com/how-to-build-an-agent
+
 Here is an example:
 
 ```

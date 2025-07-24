@@ -5,7 +5,6 @@ This project demonstrates how to build a simple agent that utilizes Anthropic's 
 Here is an example:
 
 ```
-Chat with Claude Sonnet 4 (type '/q' to quit):
 You: where is 'run_inference' method defined and what does its code look like?
 Claude: I'll help you find the 'run_inference' method. Let me start by exploring the current directory structure to understand the codebase and locate where this method might be defined.
 Tool request from claud: list_files({:directory=>"."})
